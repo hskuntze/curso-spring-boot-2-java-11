@@ -35,7 +35,7 @@ public class Product implements Serializable{
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn( name = "product_id"), inverseJoinColumns = @JoinColumn(name= "category_id") )
 	private Set<Category> categories = new HashSet<>(); //Por que instanciar? Garante que a coleção não comece valendo null, tem que começar vazia e instanciada
 	
-	@OneToMany(mappedBy = "id.product")
+	@OneToMany(mappedBy = "id.product") //Em "OrderItem" o atributo é nomeado "id", e o id (em OrderItemPk) por sua vez é que possui o pedido
 	private Set<OrderItem> items = new HashSet<>();
 	
 	public Product() {

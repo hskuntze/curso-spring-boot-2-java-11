@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.KuntzeProjects.course.entities.enums.OrderStatus;
@@ -36,8 +38,11 @@ public class Order implements Serializable{
 	@JoinColumn(name="client_id")
 	private User client;
 	
-	@OneToMany(mappedBy = "id.order") //Em "OrderItem" o atributo é nomeado "id", e o id por sua vez é que possui o pedido
+	@OneToMany(mappedBy = "id.order") //Em "OrderItem" o atributo é nomeado "id", e o id (em OrderItemPk) por sua vez é que possui o pedido
 	private Set<OrderItem> items = new HashSet<>();
+	
+	@OneToOne(mappedBy="order", cascade = CascadeType.ALL) //No caso do 1-1 estamos mapeando as duas entidades para terem o mesmo id
+	private Payment payment;
 	
 	public Order() {
 	}
@@ -71,6 +76,14 @@ public class Order implements Serializable{
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 	
 	public Set<OrderItem> getItems(){

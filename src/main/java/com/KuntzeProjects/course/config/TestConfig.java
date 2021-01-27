@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.KuntzeProjects.course.entities.Category;
 import com.KuntzeProjects.course.entities.Order;
 import com.KuntzeProjects.course.entities.OrderItem;
+import com.KuntzeProjects.course.entities.Payment;
 import com.KuntzeProjects.course.entities.Product;
 import com.KuntzeProjects.course.entities.User;
 import com.KuntzeProjects.course.entities.enums.OrderStatus;
@@ -84,5 +85,12 @@ public class TestConfig implements CommandLineRunner{
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice()); 
 		
 		orderItemRepository.saveAll(Arrays.asList(oi1,oi2,oi3,oi4));	
+		
+		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T22:24:17Z"), o1);
+		/* PECULIARIDADE: Para salvarmos um objeto DEPENDENTE em uma relação 1-1
+		não utilizamos o repository do objeto dependente, na realidade, realizamos
+		a associação de mão-dupla em memória, e em seguida, chamamos o repository do objeto independente */
+		o1.setPayment(pay1);
+		orderRepository.save(o1);
 	}
 }
