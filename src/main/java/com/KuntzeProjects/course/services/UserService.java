@@ -23,4 +23,8 @@ public class UserService {
 		Optional<User> obj = repository.findById(id); //findById retorna o tipo "Optional" existente desde o Java8
 		return obj.get(); //a função .get do "Optional" retorna o tipo que está definido no Optional, no caso, User
 	}
+	
+	public User insert(User obj) {
+		return repository.save(obj); //Esta operação retorna um objeto "salvo" (realiza a operação de salvamento)
+	}
 }
