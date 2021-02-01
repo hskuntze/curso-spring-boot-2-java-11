@@ -3,6 +3,8 @@ package com.KuntzeProjects.course.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,9 +45,13 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
-		User entity = repository.getOne(id); //'getOne' permite que o objeto seja monitorado pelo JPA antes de ser modificado definitivamente no banco de dados
-		updateData(entity, obj); //Método auxiliar
-		return repository.save(entity);
+		try {
+			User entity = repository.getOne(id); //'getOne' permite que o objeto seja monitorado pelo JPA antes de ser modificado definitivamente no banco de dados
+			updateData(entity, obj); //Método auxiliar
+			return repository.save(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
